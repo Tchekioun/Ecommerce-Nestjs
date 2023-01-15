@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -28,6 +29,11 @@ export class ProductsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(+id);
+  }
+
+  @Get('/search/findByCategoryId')
+  findByCategoryId(@Query('id') id: string) {
+    return this.productsService.findByCategoryId(+id);
   }
 
   @Patch(':id')
