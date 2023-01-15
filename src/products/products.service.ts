@@ -17,6 +17,9 @@ export class ProductsService {
   findOne(id: number) {
     return this.prismaService.product.findUnique({ where: { id } });
   }
+  findByCategoryId(category_id: number) {
+    return this.prismaService.product.findMany({ where: { category_id } });
+  }
 
   update(id: number, data: Prisma.ProductUpdateInput) {
     return this.prismaService.product.update({ where: { id }, data: data });
