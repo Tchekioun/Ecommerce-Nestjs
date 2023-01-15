@@ -13,6 +13,11 @@ export class ProductsService {
   findAll() {
     return this.prismaService.product.findMany();
   }
+  findByNameContaining(searchString) {
+    return this.prismaService.product.findMany({
+      where: { name: { contains: searchString, mode: 'insensitive' } },
+    });
+  }
 
   findOne(id: number) {
     return this.prismaService.product.findUnique({ where: { id } });
