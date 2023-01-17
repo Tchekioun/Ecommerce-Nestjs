@@ -36,7 +36,7 @@ export class ProductsController {
     @Query('id') id: string,
     @Query('page') page: string,
     @Query('size') size: string,
-    @Query('name') searchString: string,
+    @Query('name') searchString?: string,
   ) {
     return this.productsService.findByCategoryId(
       +id,
