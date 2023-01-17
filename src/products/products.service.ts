@@ -30,7 +30,10 @@ export class ProductsService {
     searchString,
   ) {
     const total = await this.prismaService.product.count({
-      where: { category_id },
+      where: {
+        category_id,
+        AND: [{ name: { contains: searchString, mode: 'insensitive' } }],
+      },
     });
     const skip = (page - 1) * size;
     const take = size;
