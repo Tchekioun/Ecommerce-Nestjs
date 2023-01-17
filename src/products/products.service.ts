@@ -24,17 +24,25 @@ export class ProductsService {
     return this.prismaService.product.findUnique({ where: { id } });
   }
   async findByCategoryId(category_id: number, page: number, size: number) {
-    const total = await this.prismaService.product.count();
+    const total = await this.prismaService.product.count({
+      where: { category_id },
+    });
     const skip = (page - 1) * size;
     const take = size;
-    const numOfPages = Math.ceil(total / size);
     const products = await this.prismaService.product.findMany({
       where: { category_id },
       skip: skip,
       take: take,
     });
 
-    return { counts: total, numOfPages: numOfPages, products };
+    return {
+      page: {
+        theTotalElements: total,
+        thePageNumber: page,
+        thePageSize: take,
+      },
+      products: products,
+    };
   }
 
   update(id: number, data: Prisma.ProductUpdateInput) {
