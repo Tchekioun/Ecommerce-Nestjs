@@ -10,8 +10,9 @@ export class ProductsService {
     return this.prismaService.product.create({ data: data });
   }
 
-  findAll() {
-    return this.prismaService.product.findMany();
+  async findAll() {
+    const products = await this.prismaService.product.findMany();
+    return products;
   }
   findByNameContaining(searchString) {
     return this.prismaService.product.findMany({
@@ -22,8 +23,18 @@ export class ProductsService {
   findOne(id: number) {
     return this.prismaService.product.findUnique({ where: { id } });
   }
-  findByCategoryId(category_id: number) {
-    return this.prismaService.product.findMany({ where: { category_id } });
+  async findByCategoryId(category_id: number, page: number, size: number) {
+    const total = await this.prismaService.product.count();
+    const skip = (page - 1) * size;
+    const take = size;
+    const numOfPages = Math.ceil(total / size);
+    const products = await this.prismaService.product.findMany({
+      where: { category_id },
+      skip: skip,
+      take: take,
+    });
+
+    return { counts: total, numOfPages: numOfPages, products };
   }
 
   update(id: number, data: Prisma.ProductUpdateInput) {

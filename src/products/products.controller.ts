@@ -32,8 +32,12 @@ export class ProductsController {
   }
 
   @Get('/search/findByCategoryId')
-  findByCategoryId(@Query('id') id: string) {
-    return this.productsService.findByCategoryId(+id);
+  findByCategoryId(
+    @Query('id') id: string,
+    @Query('page') page: string,
+    @Query('size') size: string,
+  ) {
+    return this.productsService.findByCategoryId(+id, +page, +size);
   }
   @Get('/search/findByNameContaining')
   findByNameContaining(@Query('name') searchString: string) {
