@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CountriesService {
+  constructor(private prismaService: PrismaService) {}
   findAll() {
-    return `This action returns all countries`;
+    return this.prismaService.country.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} country`;
+  findCountryStates(id: number) {
+    return this.prismaService.state.findMany({ where: { country_id: id } });
   }
 }
