@@ -12,6 +12,6 @@ export class CountriesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.countriesService.findOne(+id);
+    return this.countriesService.findCountryStates(+id);
   }
 }
