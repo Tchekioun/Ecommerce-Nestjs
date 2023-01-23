@@ -11,18 +11,19 @@ datasource db {
 }
 
 model Product {
-  id                Int      @id @default(autoincrement())
-  sku               String? @unique
+  id                Int         @id @default(autoincrement())
+  sku               String?     @unique
   name              String?
   description       String?
-  unit_price        Decimal? @db.Money
+  unit_price        Decimal?    @db.Money
   image_url         String?
-  active Int @db.SmallInt
+  active            Int         @db.SmallInt
   units_in_stock    Int?
-  date_created      DateTime @default(now())
-  last_updated      DateTime @updatedAt()
+  date_created      DateTime    @default(now())
+  last_updated      DateTime    @updatedAt
   category_id       Int
-  category_relation Category @relation(fields: [category_id], references: [id])
+  category_relation Category    @relation(fields: [category_id], references: [id])
+  orderItems        OrderItem[]
 }
 
 model Category {
@@ -31,16 +32,63 @@ model Category {
   products Product[]
 }
 
-model Country{
-  id Int @id @default(autoincrement())
-  code String @unique @db.VarChar(2)
-  name String @unique @db.VarChar(50)
+model Country {
+  id     Int     @id @default(autoincrement())
+  code   String  @unique @db.VarChar(2)
+  name   String  @unique @db.VarChar(50)
   states State[]
 }
 
-model State{
-  id Int @id @default(autoincrement())
-  name String @unique @db.VarChar(100)
-  country_id Int
+model State {
+  id               Int     @id @default(autoincrement())
+  name             String  @unique @db.VarChar(100)
+  country_id       Int
   country_relation Country @relation(fields: [country_id], references: [id])
+}
+
+model Customer {
+  id         Int      @id @default(autoincrement())
+  first_name String   @db.VarChar(255)
+  last_name  String   @db.VarChar(255)
+  email      String   @db.VarChar(255)
+  orders     Orders[]
+}
+
+model Orders {
+  id                    Int         @id @default(autoincrement())
+  order_tracking_number String      @db.VarChar(255)
+  total_price           Decimal     @db.Money
+  total_quantity        Int
+  billing_address_id    Int
+  customer_id           Int
+  shipping_address_id   Int
+  status                String      @db.VarChar()
+  date_created          DateTime    @default(now())
+  last_updated          DateTime    @updatedAt
+  customer_relation     Customer    @relation(fields: [customer_id], references: [id])
+  shipping_relation     Address     @relation(name: "BillingAddresses", fields: [shipping_address_id], references: [id])
+  billing_relation      Address     @relation(name: "ShipppingAddresses", fields: [billing_address_id], references: [id])
+  orderItems            OrderItem[]
+}
+
+model Address {
+  id                 Int      @id @default(autoincrement())
+  city               String   @db.VarChar(255)
+  country            String   @db.VarChar(255)
+  state              String   @db.VarChar(255)
+  street             String   @db.VarChar(255)
+  zip_code           String   @db.VarChar(255)
+  billingAddresses   Orders[] @relation("BillingAddresses")
+  shipppingAddresses Orders[] @relation("ShipppingAddresses")
+}
+
+model OrderItem {
+  id               Int     @id @default(autoincrement())
+  image_url        String  @db.VarChar(255)
+  quantity         Int
+  unit_price       Decimal @db.Money
+  order_id         Int
+  product_id       Int
+  order_relation   Orders  @relation(fields: [order_id], references: [id])
+  product_relation Product @relation(fields: [product_id], references: [id])
 }
