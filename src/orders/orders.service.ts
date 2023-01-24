@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -7,26 +8,20 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 export class OrdersService {
   constructor(private prismaService: PrismaService) {}
   async create(createOrderDto: CreateOrderDto) {
-    const { first_name, last_name } = await createOrderDto.customer;
-    const { total_price, total_quantity } = await createOrderDto.order;
     const order_tracking_number = 'test';
     return await this.prismaService.customer.create({
       data: {
-        first_name,
-        last_name,
+        ...createOrderDto.customer,
         orders: {
           create: [
             {
-              total_price,
-              total_quantity,
+              ...createOrderDto.order,
               order_tracking_number,
-              address: {
-                create: [
-                  createOrderDto.billingAddress,
-                  createOrderDto.shippingAddress,
-                ],
+              shipping_relation: { create: createOrderDto.billingAddress },
+              billing_relation: { create: createOrderDto.shippingAddress },
+              orderItems: {
+                create: createOrderDto.orderItems,
               },
-              orderItems: { create: [{createOrderDto.orderItems}] },
             },
           ],
         },
