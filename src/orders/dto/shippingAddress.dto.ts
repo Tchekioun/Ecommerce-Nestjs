@@ -3,5 +3,5 @@ export class ShippingAddressDto {
   city: string;
   state: string;
   country: string;
-  zipCode: string;
+  zip_code: string;
 }
