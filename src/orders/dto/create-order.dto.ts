@@ -8,8 +8,8 @@ export class CreateOrderDto {
   shippingAddress: ShippingAddressDto;
   billingAddress: BillingAddressDto;
   order: {
-    totalPrice: number;
-    quantity: number;
+    total_price: number;
+    total_quantity: number;
   };
   orderItems: OrderItemsDto[];
 }
