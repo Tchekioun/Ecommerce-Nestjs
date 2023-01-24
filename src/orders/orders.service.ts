@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { v4 } from 'uuid';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
@@ -8,8 +8,8 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 export class OrdersService {
   constructor(private prismaService: PrismaService) {}
   async create(createOrderDto: CreateOrderDto) {
-    const order_tracking_number = 'test';
-    return await this.prismaService.customer.create({
+    const order_tracking_number = await v4();
+    const createPurchase = await this.prismaService.customer.create({
       data: {
         ...createOrderDto.customer,
         orders: {
@@ -27,6 +27,7 @@ export class OrdersService {
         },
       },
     });
+    if (createPurchase) return { orderTrackingNumber: order_tracking_number };
   }
   findAll() {
     return `This action returns all orders`;
