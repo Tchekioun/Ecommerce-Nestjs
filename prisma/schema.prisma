@@ -48,47 +48,47 @@ model State {
 
 model Customer {
   id         Int      @id @default(autoincrement())
-  first_name String   @db.VarChar(255)
-  last_name  String   @db.VarChar(255)
-  email      String   @db.VarChar(255)
+  first_name String?   @db.VarChar(255)
+  last_name  String?   @db.VarChar(255)
+  email      String?   @db.VarChar(255)
   orders     Orders[]
 }
 
 model Orders {
   id                    Int         @id @default(autoincrement())
-  order_tracking_number String      @db.VarChar(255)
-  total_price           Decimal     @db.Money
-  total_quantity        Int
-  billing_address_id    Int
-  customer_id           Int
-  shipping_address_id   Int
-  status                String      @db.VarChar()
-  date_created          DateTime    @default(now())
-  last_updated          DateTime    @updatedAt
-  customer_relation     Customer    @relation(fields: [customer_id], references: [id])
-  shipping_relation     Address     @relation(name: "BillingAddresses", fields: [shipping_address_id], references: [id])
-  billing_relation      Address     @relation(name: "ShipppingAddresses", fields: [billing_address_id], references: [id])
+  order_tracking_number String?      @db.VarChar(255)
+  total_price           Decimal?     @db.Money
+  total_quantity        Int?
+  billing_address_id    Int?
+  customer_id           Int?
+  shipping_address_id   Int?
+  status                String?      @db.VarChar()
+  date_created          DateTime?    @default(now())
+  last_updated          DateTime?    @updatedAt
+  customer_relation     Customer?    @relation(fields: [customer_id], references: [id])
+  shipping_relation     Address?     @relation(name: "BillingAddresses", fields: [shipping_address_id], references: [id])
+  billing_relation      Address?     @relation(name: "ShipppingAddresses", fields: [billing_address_id], references: [id])
   orderItems            OrderItem[]
 }
 
 model Address {
   id                 Int      @id @default(autoincrement())
-  city               String   @db.VarChar(255)
-  country            String   @db.VarChar(255)
-  state              String   @db.VarChar(255)
-  street             String   @db.VarChar(255)
-  zip_code           String   @db.VarChar(255)
+  city               String?   @db.VarChar(255)
+  country            String?   @db.VarChar(255)
+  state              String?   @db.VarChar(255)
+  street             String?   @db.VarChar(255)
+  zip_code           String?   @db.VarChar(255)
   billingAddresses   Orders[] @relation("BillingAddresses")
   shipppingAddresses Orders[] @relation("ShipppingAddresses")
 }
 
 model OrderItem {
   id               Int     @id @default(autoincrement())
-  image_url        String  @db.VarChar(255)
-  quantity         Int
-  unit_price       Decimal @db.Money
-  order_id         Int
-  product_id       Int
-  order_relation   Orders  @relation(fields: [order_id], references: [id])
-  product_relation Product @relation(fields: [product_id], references: [id])
+  image_url        String?  @db.VarChar(255)
+  quantity         Int?
+  unit_price       Decimal? @db.Money
+  order_id         Int?
+  product_id       Int?
+  order_relation   Orders?  @relation(fields: [order_id], references: [id])
+  product_relation Product? @relation(fields: [product_id], references: [id])
 }
