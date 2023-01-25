@@ -24,14 +24,14 @@ export class ProductsService {
     return this.prismaService.product.findUnique({ where: { id } });
   }
   async findByCategoryId(
-    category_id: number,
+    categoryId: number,
     page: number,
     size: number,
     searchString,
   ) {
     const total = await this.prismaService.product.count({
       where: {
-        category_id,
+        categoryId,
         AND: [{ name: { contains: searchString, mode: 'insensitive' } }],
       },
     });
@@ -39,7 +39,7 @@ export class ProductsService {
     const take = size;
     const products = await this.prismaService.product.findMany({
       where: {
-        category_id,
+        categoryId,
         AND: [{ name: { contains: searchString, mode: 'insensitive' } }],
       },
       skip: skip,

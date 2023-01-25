@@ -9,6 +9,6 @@ export class CountriesService {
   }
 
   findCountryStates(id: number) {
-    return this.prismaService.state.findMany({ where: { country_id: id } });
+    return this.prismaService.state.findMany({ where: { countryId: id } });
   }
 }

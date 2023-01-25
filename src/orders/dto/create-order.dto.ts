@@ -9,5 +9,5 @@ export class CreateOrderDto {
   shippingAddress: ShippingAddressDto;
   billingAddress: BillingAddressDto;
   order: OrderDto;
-  orderItems: OrderItemsDto[];
+  orderItem: OrderItemsDto[];
 }

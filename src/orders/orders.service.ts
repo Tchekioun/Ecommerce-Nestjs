@@ -8,7 +8,7 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 export class OrdersService {
   constructor(private prismaService: PrismaService) {}
   async create(createOrderDto: CreateOrderDto) {
-    const order_tracking_number = await v4();
+    const orderTrackingNumber = await v4();
     const createPurchase = await this.prismaService.customer.create({
       data: {
         ...createOrderDto.customer,
@@ -16,18 +16,18 @@ export class OrdersService {
           create: [
             {
               ...createOrderDto.order,
-              order_tracking_number,
+              orderTrackingNumber,
               shipping_relation: { create: createOrderDto.billingAddress },
               billing_relation: { create: createOrderDto.shippingAddress },
               orderItems: {
-                create: createOrderDto.orderItems,
+                create: createOrderDto.orderItem,
               },
             },
           ],
         },
       },
     });
-    if (createPurchase) return { orderTrackingNumber: order_tracking_number };
+    if (createPurchase) return { orderTrackingNumber: orderTrackingNumber };
   }
   findAll() {
     return `This action returns all orders`;
