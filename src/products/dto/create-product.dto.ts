@@ -2,11 +2,11 @@ export class CreateProductDto {
   sku?: string;
   name?: string;
   description?: string;
-  unit_price?: number;
-  image_url?: string;
+  unitPrice?: number;
+  imageUrl?: string;
   active?: number;
-  units_in_stock?: number;
-  date_created?: Date;
-  last_updated?: Date;
-  category_id?: number;
+  unitsInStock?: number;
+  dateCreated?: Date;
+  lastUpdated?: Date;
+  categoryId?: number;
 }
